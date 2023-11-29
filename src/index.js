@@ -6,17 +6,23 @@ import reportWebVitals from './reportWebVitals';
 import { db } from './server/firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import SelectChat from './routes/SelectChat';
+import ChatContainer from './routes/ChatContainer';
 import { ChakraProvider } from '@chakra-ui/react';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SelectChat />
+    element: <ChatContainer />
   }
 ]);
 
 const App = () => {
+  useEffect(() => {
+    addDoc(collection(db, "chats"), {
+      hello: "world"
+    });
+  }, []); 
+
   return (
     <ChakraProvider>
       <RouterProvider router={router} />

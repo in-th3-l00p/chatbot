@@ -1,7 +1,7 @@
+import { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useState } from "react";
 
-const SelectChat = () => {
+const Chat = ({ id }) => {
     const [loading, setLoading] = useState(false);
     const [messages, setMessages] = useState([
         {
@@ -15,8 +15,7 @@ const SelectChat = () => {
     ]);
 
     return (
-        <main className="h-screen w-screen p-8">
-            <section className="w-screen h-screen p-6 border border-slate-100">
+        <section className="w-screen h-screen p-6 border border-slate-100">
             <h1 className="text-6xl text-violet-600">NexoTalk</h1>
 
             <ul className="py-2 px-3">
@@ -81,8 +80,7 @@ const SelectChat = () => {
                 <button className="px-6 py-1 rounded border border-slate-70" type="submit">Submit</button>
             </form>
         </section>
-        </main>
     );
 }
 
-export default SelectChat;
+export default Chat;
