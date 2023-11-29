@@ -17,12 +17,6 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  useEffect(() => {
-    addDoc(collection(db, "chats"), {
-      hello: "world"
-    });
-  }, []); 
-
   return (
     <ChakraProvider>
       <RouterProvider router={router} />
