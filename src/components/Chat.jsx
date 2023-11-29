@@ -38,10 +38,10 @@ const Chat = ({ id }) => {
                     <li className={`py-2 px-4 ${message.sender == "user" ? "border-b border-slate-200" : ""}`} key={index}>
                         {message.sender === "user" ? <h2 className="flex items-center gap-4">
                             <div className="h-10 w-10 flex items-center">
-                                <img src={UserLogo} />
+                                <img className="w-8 h-8" src={UserLogo} />
                             </div>
                             User</h2> : <h2 className="flex items-center gap-4"> <div className="h-10 w-10 flex items-center">
-                                <img src={NexoLogo} />
+                                <img className="w-8 h-8" src={NexoLogo} />
                             </div>
                             NexoTalk</h2>}
                         <p>{message.content}</p>
