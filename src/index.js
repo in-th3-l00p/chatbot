@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import firebase, { db } from './server/firebase';
+import { addDoc, collection, doc } from 'firebase/firestore';
+
+const App = () => {
+  useEffect(() => {
+    addDoc(collection(db, "chats"), {
+      hello: "world"
+    });
+  }, []); 
+
+  return (
+    <p>hello world</p>
+  );
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
