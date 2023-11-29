@@ -11,10 +11,7 @@ const ChatContainer = () => {
 
     useEffect(() => {
         getDocs(collection(db, "chats"))
-            .then(chats => {
-                console.log(chats);
-                setChats(chats);
-            })
+            .then(chats => setChats(chats.docs.map(doc => doc.id)))
             .finally(() => setLoading(false));
     }, []);
 
