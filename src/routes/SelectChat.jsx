@@ -28,9 +28,11 @@ const SelectChat = () => {
                 ))}
             </ul>
 
-            <form onSubmit={(e) => {
+            <form
+            className="fixed  bottom-0 left-0 right-0 h-20 border py-2 px-4 flex gap-4"
+            onSubmit={(e) => {
                 e.preventDefault();
-                className="fixed  bottom-0 left-0 right-0 h-20 border py-2 px-4 flex gap-4"
+                
                 const data = new FormData(e.currentTarget);
                 const query = data.get("query");
 
