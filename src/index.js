@@ -3,8 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import firebase, { db } from './server/firebase';
-import { addDoc, collection, doc } from 'firebase/firestore';
+import { db } from './server/firebase';
+import { addDoc, collection } from 'firebase/firestore';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import SelectChat from './routes/SelectChat';
+import { ChakraProvider } from '@chakra-ui/react';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <SelectChat />
+  }
+]);
 
 const App = () => {
   useEffect(() => {
@@ -14,7 +24,9 @@ const App = () => {
   }, []); 
 
   return (
-    <p>hello world</p>
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   );
 }
 
