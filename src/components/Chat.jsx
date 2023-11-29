@@ -2,32 +2,50 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../server/firebase";
+import NexoLogo from "../nexo-talk.png";
+import UserLogo from "../user.png";
 
 const Chat = ({ id }) => {
     const currentDoc = doc(collection(db, "chats"), id);
     const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         getDoc(currentDoc)
-            .then(content => setMessages(content.data().messages))
+            .then(content => {
+                const data = content.data()
+                if (data?.messages) {
+                    setMessages(content.data().messages)
+                }
+            })
+            .catch(error => setError("Error occured"))
             .finally(() => setLoading(false));
     }, []);
 
     if (loading)
         return <p>loading...</p>
+      const isMessagesValid = Array.isArray(messages) && messages.length > 0;
+
     return (
         <section className="w-full h-full p-6 border border-slate-300 relative rounded shadow-xl">
             <h1 className="text-3xl text-violet-600 text-center">NexoTalk</h1>
-
-            <ul className="py-2 px-3 overflow-auto max-h-[85%]">
+            {error && <div className="text-red-600 !">{error}</div>}
+            {isMessagesValid && <ul className="py-2 px-3 overflow-auto max-h-[85%]">
                 {messages.map((message, index) => (
                     <li className={`py-2 px-4 ${message.sender == "user" ? "border-b border-slate-200" : ""}`} key={index}>
-                        {message.sender === "user" ? <h2>User</h2> : <h2>NexoTalk</h2>}
+                        {message.sender === "user" ? <h2 className="flex items-center gap-4">
+                            <div className="h-10 w-10 flex items-center">
+                                <img src={UserLogo} />
+                            </div>
+                            User</h2> : <h2 className="flex items-center gap-4"> <div className="h-10 w-10 flex items-center">
+                                <img src={NexoLogo} />
+                            </div>
+                            NexoTalk</h2>}
                         <p>{message.content}</p>
                     </li>
                 ))}
-            </ul>
+            </ul>}
 
             <form
                 className="absolute  bottom-0 left-0 right-0 h-20 border py-2 px-4 flex gap-4"
