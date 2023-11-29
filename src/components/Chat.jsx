@@ -3,6 +3,8 @@ import axios from "axios";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../server/firebase";
 
+const API_KEY = "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";
+
 const Chat = ({ id }) => {
     const currentDoc = doc(collection(db, "chats"), id);
     const [loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ const Chat = ({ id }) => {
         getDoc(currentDoc)
             .then(content => setMessages(content.data().messages))
             .finally(() => setLoading(false));
-    }, []);
+    }, [id]);
 
     if (loading)
         return <p>loading...</p>
@@ -22,7 +24,7 @@ const Chat = ({ id }) => {
 
             <ul className="py-2 px-3 overflow-auto max-h-[85%]">
                 {messages.map((message, index) => (
-                    <li className={`py-2 px-4 ${message.sender == "user" ? "border-b border-slate-200" : ""}`} key={index}>
+                    <li className={`py-2 px-4 ${message.sender === "user" ? "border-b border-slate-200" : ""}`} key={index}>
                         {message.sender === "user" ? <h2>User</h2> : <h2>NexoTalk</h2>}
                         <p>{message.content}</p>
                     </li>
@@ -56,7 +58,7 @@ const Chat = ({ id }) => {
                         ]
                     }, {
                         headers: {
-                            "Authorization": "Bearer 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",
+                            "Authorization": `Bearer ${API_KEY}`,
                             "Accept": "application/json"
                         }
                     })
