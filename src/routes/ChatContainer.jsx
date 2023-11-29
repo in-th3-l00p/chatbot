@@ -18,7 +18,7 @@ const ChatContainer = () => {
             .finally(() => setLoading(false));
     }, []);
 
-    if (false)
+    if (loading)
         return <p>loading...</p>
     return (
         <main className="h-screen w-screen p-8">
@@ -27,7 +27,7 @@ const ChatContainer = () => {
 
             </div>
 
-            {true && (
+            {currentChat && (
                 <Chat id={currentChat} />
             )}
         </main>

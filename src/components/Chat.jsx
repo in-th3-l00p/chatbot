@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../server/firebase";
 
 const Chat = ({ id }) => {
-    const [loading, setLoading] = useState(false);
-    const [messages, setMessages] = useState([
-        {
-            sender: "user",
-            content: "Hello world"
-        },
-        {
-            sender: "ai",
-            content: "Yesss"
-        }
-    ]);
+    const currentDoc = doc(collection(db, "chats"), id);
+    const [loading, setLoading] = useState(true);
+    const [messages, setMessages] = useState([]);
 
+    useEffect(() => {
+        getDoc(currentDoc)
+            .then(content => setMessages(content.data().messages))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading)
+        return <p>loading...</p>
     return (
         <section className="w-full h-full p-6 border border-slate-300 relative rounded shadow-xl">
             <h1 className="text-3xl text-violet-600 text-center">NexoTalk</h1>
@@ -31,10 +33,8 @@ const Chat = ({ id }) => {
                 className="absolute  bottom-0 left-0 right-0 h-20 border py-2 px-4 flex gap-4"
                 onSubmit={(e) => {
                     e.preventDefault();
-
                     const data = new FormData(e.currentTarget);
                     const query = data.get("query");
-
                     setLoading(true);
                     axios.post("https://api.openai.com/v1/chat/completions", {
                         "model": "gpt-3.5-turbo",
@@ -56,22 +56,27 @@ const Chat = ({ id }) => {
                         ]
                     }, {
                         headers: {
-                            "Authorization": "Bearer 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",
+                            "Authorization": "Bearer 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",
                             "Accept": "application/json"
                         }
                     })
                         .then(resp => {
-                            setMessages(messages => ([
-                                ...messages,
-                                {
-                                    sender: "user",
-                                    content: query
-                                },
-                                {
-                                    sender: "ai",
-                                    content: resp.data.choices[0].message.content
-                                }
-                            ]))
+                            setMessages(messages => {
+                                const newMessages = ([
+                                    ...messages,
+                                    {
+                                        sender: "user",
+                                        content: query
+                                    },
+                                    {
+                                        sender: "ai",
+                                        content: resp.data.choices[0].message.content
+                                    }
+                                ]);
+
+                                updateDoc(currentDoc, { messages: newMessages });
+                                return newMessages;
+                            });
                             setLoading(false);
                         })
                 }}>
